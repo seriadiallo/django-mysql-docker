@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/usr/src/app
+      - ./media:/app/media
+      - ./dist:/app/dist
+      - staticfiles_volume:/home/app/staticfiles
+    env_file:
+      - ./env/backend.env
+    ports:
+      - 8000:8000
+    command: >
+     bash -c "python3 manage.py runserver 0.0.0.0:8000"
+    #   #  bash -c "python manage.py collectstatic --noinput && 
+    #   #   gunicorn --bind 0.0.0.0:8000 --worker-tmp-dir /dev/shm blog.wsgi:application"
+    depends_on:
+      - db
+  
+  db:
+    image: mysql:8.0
+    container_name: db
+    restart: unless-stopped
+    env_file:
+      - ./env/db.env
+    volumes:
+      - app_db:/var/lib/mysql 
+volumes:
+  app_db:
+  staticfiles_volume:
+
+
+
+
+

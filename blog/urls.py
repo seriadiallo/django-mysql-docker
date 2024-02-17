@@ -20,6 +20,6 @@ from articles.views import home
 
 urlpatterns = [
     path('', home, name='home'),
-    path('admin/', admin.site.urls),
     path('articles/', include('articles.urls')),
+    path('admin/', admin.site.urls),
 ]

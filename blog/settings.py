@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+import decouple
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +21,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'gnmp&j7ep#9=^%*vo&augnk9z5_dwq1wo1#-fdkk@++pr338g)'
+SECRET_KEY = decouple.config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = decouple.config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = decouple.config("ALLOWED_HOSTS", cast=decouple.Csv(), default='localhost')
+
 
 
 # Application definition
@@ -76,8 +78,12 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': decouple.config('DB_ENGINE'),
+        'NAME': decouple.config('DB_NAME'),
+        'USER': decouple.config('DB_USER'),
+        'PASSWORD': decouple.config('DB_PASSWORD'),
+        'HOST': decouple.config('DB_HOST'),
+        'PORT': decouple.config('DB_PORT'),
     }
 }
 
